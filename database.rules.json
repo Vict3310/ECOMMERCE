@@ -1,0 +1,47 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "products": {
+      ".read": true,
+      ".write": "root.child('users').child(auth.uid).child('role').val() === 'owner'"
+    },
+    "orders": {
+      ".read": "root.child('users').child(auth.uid).child('role').val() === 'owner'",
+      ".write": true,
+      "$orderId": {
+        ".read": "data.child('email').val() === auth.token.email || root.child('users').child(auth.uid).child('role').val() === 'owner'",
+        ".write": "(!data.exists() || root.child('users').child(auth.uid).child('role').val() === 'owner')"
+      }
+    },
+    "users": {
+        "$uid": {
+          ".read": "$uid === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'owner'",
+          ".write": "$uid === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'owner'"
+        }
+    },
+    "settings": {
+      "general": {
+        ".read": true,
+        ".write": "root.child('users').child(auth.uid).child('role').val() === 'owner'"
+      }
+    },
+    "siteSettings": {
+      ".read": true,
+      ".write": "root.child('users').child(auth.uid).child('role').val() === 'owner'"
+    },
+    "reviews": {
+      "$productId": {
+        ".read": true,
+        ".write": "auth != null"
+      }
+    },
+    "chats": {
+      ".read": "root.child('users').child(auth.uid).child('role').val() === 'owner'",
+      "$chatId": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    }
+  }
+}

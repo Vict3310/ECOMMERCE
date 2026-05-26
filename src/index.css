@@ -1,0 +1,253 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+
+:root {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F4F4F4;
+  --text-primary: #000000;
+  --text-secondary: #555555;
+  --brand-blue: #0047FF;
+  --border-thin: 0.5px solid #EAEAEA;
+  --accent: var(--brand-blue);
+  --ls-tight: -0.04em;
+  --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --btn-text-on-light: #000000;
+}
+
+.dark-mode {
+  --bg-primary: #0A0A0A;
+  --bg-secondary: #161616;
+  --text-primary: #F5F5F5;
+  --text-secondary: #A0A0A0;
+  --brand-blue: #3378FF;
+  --border-thin: 1px solid #282828;
+  --accent: var(--brand-blue);
+  --product-drop-shadow: drop-shadow(0 40px 60px rgba(51, 120, 255, 0.1)) grayscale(1);
+  --btn-text-on-light: #FFFFFF;
+}
+
+.hollow-text {
+  -webkit-text-stroke: 1.5px var(--text-primary);
+  color: transparent;
+}
+
+.solid-blue {
+  color: var(--brand-blue);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  letter-spacing: var(--ls-tight);
+  text-transform: uppercase;
+  line-height: 0.9;
+}
+
+p, span, div, a {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Base Layout Helpers */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.thin-border-bottom {
+  border-bottom: var(--border-thin);
+}
+
+.thin-border-top {
+  border-top: var(--border-thin);
+}
+
+.thin-border-left {
+  border-left: var(--border-thin);
+}
+
+.thin-border-right {
+  border-right: var(--border-thin);
+}
+
+.grid-cols-12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.product-grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -468px 0; }
+  100% { background-position: 468px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(to right, var(--bg-secondary) 8%, #282828 18%, var(--bg-secondary) 33%);
+  background-size: 800px 104px;
+  animation: shimmer 1.5s linear infinite forwards;
+  border-radius: 2px;
+  opacity: 0.2;
+}
+
+.fade-in {
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-up {
+  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom Scrollbar for Elite Aesthetics */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--text-primary);
+  opacity: 0.2;
+  border-radius: 0px;
+}
+
+/* Input & Form Refining */
+input, textarea, select {
+  transition: border-color 0.3s ease;
+  outline: none;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--text-primary) !important;
+}
+
+@media (max-width: 1024px) {
+  h1 { font-size: 64px !important; }
+  h2 { font-size: 32px !important; }
+  .container { padding: 0 20px !important; }
+}
+
+@media (max-width: 768px) {
+  h1 { font-size: 48px !important; }
+  h2 { font-size: 28px !important; }
+  .hero-title { font-size: clamp(3rem, 12vw, 8rem) !important; letter-spacing: -0.05em !important; }
+  .hero-nav { right: 24px !important; bottom: 32px !important; }
+  .hero-counter { left: 24px !important; bottom: 32px !important; }
+  .hero-content { justify-content: flex-end !important; padding-bottom: 120px !important; }
+  .container { padding: 0 16px !important; }
+  .hide-on-mobile { display: none !important; }
+  .stack-mobile { flex-direction: column !important; align-items: stretch !important; gap: 32px !important; }
+  .grid-mobile-1 { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: flex !important; }
+  .blur-content { filter: blur(4px); opacity: 0.3; pointer-events: none; }
+  .admin-portal { grid-template-columns: 1fr !important; }
+  .admin-sidebar-mobile { 
+    display: flex !important; 
+    position: fixed !important; 
+    top: 0 !important; left: 0 !important; 
+    width: 100% !important; height: 100vh !important; 
+    z-index: 10000 !important; 
+    padding-top: 80px !important; 
+    box-shadow: 0 0 60px rgba(0,0,0,0.3); 
+  }
+  .admin-main-mobile { padding: 100px 24px 40px !important; }
+  .admin-row-mobile { grid-template-columns: 1fr !important; gap: 16px !important; padding: 24px !important; }
+  .admin-row-mobile img { width: 100% !important; height: 200px !important; object-fit: contain !important; }
+  .admin-actions-mobile { justify-content: flex-start !important; margin-top: 16px !important; }
+  .mobile-text-giant { font-size: 64px !important; line-height: 1 !important;  }
+  .feed-card { flex: 0 0 85vw !important; height: 400px !important; }
+  .mobile-horizontal-scroll { 
+    flex-direction: row !important; 
+    overflow-x: auto !important; 
+    white-space: nowrap; 
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+    scroll-snap-type: x mandatory;
+  }
+  .mobile-horizontal-scroll > div {
+    scroll-snap-align: start;
+  }
+  .mobile-horizontal-scroll::-webkit-scrollbar { display: none; }
+  .floating-auth { bottom: 24px !important; right: 24px !important; }
+  .auth-main-btn { width: 48px !important; height: 48px !important; }
+  .auth-main-btn svg { width: 20px !important; height: 20px !important; }
+  .auth-label { right: 60px !important; font-size: 8px !important; padding: 6px 12px !important; }
+  .product-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .product-grid-container { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; overflow-x: hidden; }
+  .product-card-mobile { padding: 16px !important; }
+  .product-card-mobile h3 { font-size: 11px !important; letter-spacing: 0 !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .product-card-mobile p { font-size: 12px !important; }
+  .product-card-mobile .cart-btn-text { font-size: 8px !important; padding: 10px 0 !important; }
+  .product-card-mobile .hide-mobile-actions { display: none !important; }
+  .product-card-mobile .condition-btn { font-size: 8px !important; padding: 4px 6px !important; }
+  .product-card-mobile-img { padding: 0 !important; margin-bottom: 16px !important; width: 100% !important; }
+  .hero-explore-btn { padding: 16px !important; font-size: 9px !important; }
+  .hero-explore-btn svg { width: 14px; height: 14px; }
+  .mobile-nav-btn { width: 40px !important; height: 40px !important; }
+  .mobile-p-24 { padding: 24px !important; }
+  .modal-wrapper-mobile { padding: 16px !important; align-items: center !important; }
+  .modal-content-mobile { max-height: 90vh !important; height: auto !important; border: var(--border-thin) !important; border-radius: 2px !important; }
+  .admin-grid-2 { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .admin-grid-specs { grid-template-columns: 1fr !important; gap: 12px !important; }
+}
+
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+
+.admin-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.admin-grid-specs { display: grid; grid-template-columns: 1fr 1fr 48px; gap: 12px; margin-bottom: 16px; }
+
+@media (max-width: 480px) {
+  h1 { font-size: 36px !important; }
+  h2 { font-size: 24px !important; }
+  h3 { font-size: 18px !important; }
+  .mobile-p-24 { padding: 24px !important; }
+  .mobile-full-width { width: 100% !important; }
+}
