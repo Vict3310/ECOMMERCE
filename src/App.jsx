@@ -304,31 +304,31 @@ const AppContent = () => {
           )}
 
           <Routes>
-              <Route
-                path="/"
-                element={
-                  <Home
-                    onShopClick={() => appNavigate('shop')}
-                    onProductClick={(arg) => (arg === 'cart' ? appNavigate('cart') : appNavigate('detail', arg))}
-                  />
-                }
-              />
-              <Route
-                path="/shop"
-                element={
-                  <Shop onProductClick={(p) => (p === 'cart' ? appNavigate('cart') : appNavigate('detail', p))} />
-                }
-              />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/product/:slug" element={<ProductDetailRoute appNavigate={appNavigate} />} />
-              <Route path="/admin" element={<AdminDashboard onExit={() => appNavigate('home')} />} />
-              <Route path="/compare" element={<ComparisonView onBack={() => appNavigate('shop')} />} />
-              <Route path="/orders" element={<Orders />} />
-              <Route path="/order-confirmation" element={<OrderConfirmation />} />
-              <Route path="/wishlist" element={<WishlistView onNavigate={appNavigate} />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <Route
+              path="/"
+              element={
+                <Home
+                  onShopClick={() => appNavigate('shop')}
+                  onProductClick={(arg) => (arg === 'cart' ? appNavigate('cart') : appNavigate('detail', arg))}
+                />
+              }
+            />
+            <Route
+              path="/shop"
+              element={
+                <Shop onProductClick={(p) => (p === 'cart' ? appNavigate('cart') : appNavigate('detail', p))} />
+              }
+            />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/product/:slug" element={<ProductDetailRoute appNavigate={appNavigate} />} />
+            <Route path="/admin" element={<AdminDashboard onExit={() => appNavigate('home')} />} />
+            <Route path="/compare" element={<ComparisonView onBack={() => appNavigate('shop')} />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/order-confirmation" element={<OrderConfirmation />} />
+            <Route path="/wishlist" element={<WishlistView onNavigate={appNavigate} />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
 
           {!isAdminRoute && <LiveChatWidget />}
         </main>

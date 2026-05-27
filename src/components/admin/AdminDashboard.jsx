@@ -265,15 +265,8 @@ const AdminDashboard = ({ onExit }) => {
   return (
     <div className={`admin-portal fade-in ${isMobileMenuOpen ? 'mobile-menu-active' : ''}`} style={{ display: 'grid', gridTemplateColumns: '280px 1fr', height: '100vh', backgroundColor: 'var(--bg-primary)', overflow: 'hidden', position: 'relative' }}>
       
-      {/* Mobile Top Bar */}
-      <div className="show-mobile" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '72px', padding: '0 24px', backgroundColor: 'var(--bg-primary)', borderBottom: 'var(--border-thin)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 9999 }}>
-         <div onClick={onExit} style={{ cursor: 'pointer' }}>
-            <h1 style={{ fontSize: '12px', fontWeight: 900, letterSpacing: '0.2em', textTransform: 'uppercase' }}>{siteSettings?.name?.split(' ')[0] || 'BRAND'}.<span style={{ color: 'var(--brand-blue)' }}>PORTAL</span></h1>
-         </div>
-         <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ width: '40px', height: '40px', border: 'var(--border-thin)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)' }}>
-            {isMobileMenuOpen ? <X size={20} /> : <Layout size={20} />}
-         </button>
-      </div>
+
+
 
       {/* Sidebar */}
       <aside className={`thin-border-right ${isMobileMenuOpen ? 'admin-sidebar-mobile' : 'hide-on-mobile'}`} style={{ padding: '48px 32px', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-primary)' }}>
@@ -383,6 +376,12 @@ const AdminDashboard = ({ onExit }) => {
                  ))}
               </div>
            </div>
+        )}
+
+        {activeTab === 'receipts' && (
+           <Suspense fallback={<EliteLoader />}>
+              <ReceiptGenerator />
+           </Suspense>
         )}
 
         {activeTab === 'orders' && (
