@@ -12,6 +12,7 @@ const ProductFormModal = lazy(() => import('./ProductFormModal'));
 const AdminChatInbox = lazy(() => import('./AdminChatInbox'));
 const InventoryIntelligence = lazy(() => import('../ui/InventoryIntelligence'));
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { compressImageFile } from '../../utils/compressImage';
 
 const AdminDashboard = ({ onExit }) => {
   const { 
@@ -35,6 +36,7 @@ const AdminDashboard = ({ onExit }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [allReviews, setAllReviews] = useState([]);
   const [isInventoryIntelligenceOpen, setIsInventoryIntelligenceOpen] = useState(false);
+  const [isSliderUploading, setIsSliderUploading] = useState(false);
 
   useEffect(() => {
     if (selectedSlider) setSliderData(selectedSlider);
@@ -84,6 +86,33 @@ const AdminDashboard = ({ onExit }) => {
     }
     await supabase.from('site_settings').upsert({ key: dbKey, value: currentArray });
     setIsSliderFormOpen(false);
+  };
+
+  const handleSliderImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 8 * 1024 * 1024) {
+      showNotification('Image must be under 8MB.', 'error');
+      return;
+    }
+
+    setIsSliderUploading(true);
+    try {
+      const prepared = await compressImageFile(file);
+      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}-${prepared.name}`;
+      const { error: uploadError } = await supabase.storage.from('products').upload(fileName, prepared);
+      if (uploadError) throw uploadError;
+      const { data: { publicUrl } } = supabase.storage.from('products').getPublicUrl(fileName);
+      
+      setSliderData(prev => ({ ...prev, image: publicUrl }));
+    } catch (error) {
+      console.error("Storage Error Details:", error);
+      showNotification(`Upload failed: ${error.message || 'Unknown error'}`, 'error');
+    } finally {
+      setIsSliderUploading(false);
+      e.target.value = '';
+    }
   };
 
   const handleBulkUpdate = async () => {
@@ -857,7 +886,13 @@ const AdminDashboard = ({ onExit }) => {
             <h2 style={{ fontSize: '14px', fontWeight: 800, marginBottom: '32px' }}>{selectedSlider ? 'EDIT SLIDE' : 'NEW SLIDE'}</h2>
             <div style={{ display: 'grid', gap: '24px' }}>
               <input placeholder="TITLE" value={sliderData.title} onChange={e => setSliderData({...sliderData, title: e.target.value})} style={{ width: '100%', padding: '16px', border: 'var(--border-thin)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)', fontWeight: 800 }} />
-              <input placeholder="IMAGE URL" value={sliderData.image} onChange={e => setSliderData({...sliderData, image: e.target.value})} style={{ width: '100%', padding: '16px', border: 'var(--border-thin)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)', fontWeight: 800 }} />
+              <div style={{ display: 'flex', gap: '8px' }}>
+                 <input placeholder="IMAGE URL" value={sliderData.image} onChange={e => setSliderData({...sliderData, image: e.target.value})} style={{ flex: 1, padding: '16px', border: 'var(--border-thin)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)', fontWeight: 800 }} />
+                 <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', backgroundColor: 'var(--bg-secondary)', border: 'var(--border-thin)', cursor: 'pointer', color: 'var(--text-primary)' }}>
+                    {isSliderUploading ? <span style={{ fontSize: '10px', fontWeight: 800 }}>...</span> : <Camera size={20} />}
+                    <input type="file" accept="image/*" onChange={handleSliderImageUpload} disabled={isSliderUploading} style={{ display: 'none' }} />
+                 </label>
+              </div>
               <input placeholder="LINK / CATEGORY" value={sliderData.link} onChange={e => setSliderData({...sliderData, link: e.target.value})} style={{ width: '100%', padding: '16px', border: 'var(--border-thin)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)', fontWeight: 800 }} />
               <div style={{ display: 'flex', gap: '12px', marginTop: '12px' }}>
                 <button onClick={handleSaveSlider} style={{ flex: 1, padding: '16px', backgroundColor: 'var(--brand-blue)', color: '#FFFFFF', fontSize: '11px', fontWeight: 800 }}>SAVE</button>
