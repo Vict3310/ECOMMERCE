@@ -478,7 +478,7 @@ const AdminDashboard = ({ onExit }) => {
                     {heroSlides.map(slide => (
                        <div key={slide.id} className="stack-mobile" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px', backgroundColor: 'var(--bg-primary)', gap: '16px' }}>
                           <div className="stack-mobile" style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-                             <img src={slide.image} style={{ width: '80px', height: '40px', objectFit: 'cover', filter: 'grayscale(1)' }} />
+                             <img src={slide.image} style={{ width: '80px', height: '40px', objectFit: 'cover' }} />
                              <div><h4 style={{ fontSize: '12px', fontWeight: 800 }}>{slide.title}</h4><p style={{ fontSize: '9px', opacity: 0.4 }}>Points to: {slide.link}</p></div>
                           </div>
                           <div style={{ display: 'flex', gap: '12px' }}>
@@ -510,7 +510,7 @@ const AdminDashboard = ({ onExit }) => {
                     {feedItems.map(item => (
                        <div key={item.id} className="stack-mobile" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px', backgroundColor: 'var(--bg-primary)', gap: '16px' }}>
                           <div className="stack-mobile" style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-                             <img src={item.image} style={{ width: '40px', height: '40px', objectFit: 'cover', filter: 'grayscale(1)' }} />
+                             <img src={item.image} style={{ width: '40px', height: '40px', objectFit: 'cover' }} />
                              <div><h4 style={{ fontSize: '12px', fontWeight: 800 }}>{item.title}</h4><p style={{ fontSize: '9px', opacity: 0.4 }}>Category: {item.category}</p></div>
                           </div>
                           <div style={{ display: 'flex', gap: '12px' }}>

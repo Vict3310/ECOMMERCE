@@ -55,7 +55,7 @@ const HeroCarousel = ({ onExplore }) => {
               position: 'absolute', inset: 0, 
               width: '100%', height: '100%', 
               objectFit: 'cover', 
-              filter: 'grayscale(1) brightness(0.6)',
+              filter: 'brightness(0.6)',
               zIndex: 0
             }} 
          />
