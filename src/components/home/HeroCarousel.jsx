@@ -47,18 +47,35 @@ const HeroCarousel = ({ onExplore }) => {
     <div style={{ position: 'relative', width: '100%', height: '85vh', backgroundColor: '#000', overflow: 'hidden' }}>
       {/* Slides */}
       <div ref={slideRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
-         <img 
-            src={heroSlides[current].image} 
-            alt={heroSlides[current].title} 
-            fetchpriority="high"
-            style={{ 
-              position: 'absolute', inset: 0, 
-              width: '100%', height: '100%', 
-              objectFit: 'cover', 
-              filter: 'brightness(0.6)',
-              zIndex: 0
-            }} 
-         />
+         {heroSlides[current].image?.match(/\.(mp4|webm|mov|ogg)$/i) ? (
+           <video 
+              src={heroSlides[current].image} 
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{ 
+                position: 'absolute', inset: 0, 
+                width: '100%', height: '100%', 
+                objectFit: 'cover', 
+                filter: 'brightness(0.6)',
+                zIndex: 0
+              }} 
+           />
+         ) : (
+           <img 
+              src={heroSlides[current].image} 
+              alt={heroSlides[current].title} 
+              fetchpriority="high"
+              style={{ 
+                position: 'absolute', inset: 0, 
+                width: '100%', height: '100%', 
+                objectFit: 'cover', 
+                filter: 'brightness(0.6)',
+                zIndex: 0
+              }} 
+           />
+         )}
          
          <div className="container hero-content" style={{ position: 'relative', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', zIndex: 2 }}>
             <h1 className="hero-text hero-title" style={{ color: '#FFF', letterSpacing: '-0.06em', lineHeight: 0.9, marginBottom: '24px' }}>

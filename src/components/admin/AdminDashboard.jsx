@@ -92,16 +92,27 @@ const AdminDashboard = ({ onExit }) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 8 * 1024 * 1024) {
+    const isVideo = file.type.startsWith('video/');
+
+    if (!isVideo && file.size > 8 * 1024 * 1024) {
       showNotification('Image must be under 8MB.', 'error');
+      return;
+    }
+    if (isVideo && file.size > 50 * 1024 * 1024) {
+      showNotification('Video must be under 50MB.', 'error');
       return;
     }
 
     setIsSliderUploading(true);
     try {
-      const prepared = await compressImageFile(file, { maxDim: 1200, quality: 0.6 });
-      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}-${prepared.name}`;
-      const { error: uploadError } = await supabase.storage.from('site-assets').upload(fileName, prepared);
+      let prepared = file;
+      if (!isVideo) {
+        prepared = await compressImageFile(file, { maxDim: 1200, quality: 0.6 });
+      }
+      
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}.${fileExt}`;
+      const { error: uploadError } = await supabase.storage.from('site-assets').upload(fileName, prepared, { contentType: file.type });
       if (uploadError) throw uploadError;
       const { data: { publicUrl } } = supabase.storage.from('site-assets').getPublicUrl(fileName);
       
@@ -478,7 +489,11 @@ const AdminDashboard = ({ onExit }) => {
                     {heroSlides.map(slide => (
                        <div key={slide.id} className="stack-mobile" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px', backgroundColor: 'var(--bg-primary)', gap: '16px' }}>
                           <div className="stack-mobile" style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-                             <img src={slide.image} style={{ width: '80px', height: '40px', objectFit: 'cover' }} />
+                             {slide.image?.match(/\.(mp4|webm|mov|ogg)$/i) ? (
+                               <video src={slide.image} style={{ width: '80px', height: '40px', objectFit: 'cover' }} muted />
+                             ) : (
+                               <img src={slide.image} style={{ width: '80px', height: '40px', objectFit: 'cover' }} />
+                             )}
                              <div><h4 style={{ fontSize: '12px', fontWeight: 800 }}>{slide.title}</h4><p style={{ fontSize: '9px', opacity: 0.4 }}>Points to: {slide.link}</p></div>
                           </div>
                           <div style={{ display: 'flex', gap: '12px' }}>
@@ -510,7 +525,11 @@ const AdminDashboard = ({ onExit }) => {
                     {feedItems.map(item => (
                        <div key={item.id} className="stack-mobile" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px', backgroundColor: 'var(--bg-primary)', gap: '16px' }}>
                           <div className="stack-mobile" style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-                             <img src={item.image} style={{ width: '40px', height: '40px', objectFit: 'cover' }} />
+                             {item.image?.match(/\.(mp4|webm|mov|ogg)$/i) ? (
+                               <video src={item.image} style={{ width: '40px', height: '40px', objectFit: 'cover' }} muted />
+                             ) : (
+                               <img src={item.image} style={{ width: '40px', height: '40px', objectFit: 'cover' }} />
+                             )}
                              <div><h4 style={{ fontSize: '12px', fontWeight: 800 }}>{item.title}</h4><p style={{ fontSize: '9px', opacity: 0.4 }}>Category: {item.category}</p></div>
                           </div>
                           <div style={{ display: 'flex', gap: '12px' }}>
@@ -890,7 +909,7 @@ const AdminDashboard = ({ onExit }) => {
                  <input placeholder="IMAGE URL" value={sliderData.image} onChange={e => setSliderData({...sliderData, image: e.target.value})} style={{ flex: 1, padding: '16px', border: 'var(--border-thin)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)', fontWeight: 800 }} />
                  <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', backgroundColor: 'var(--bg-secondary)', border: 'var(--border-thin)', cursor: 'pointer', color: 'var(--text-primary)' }}>
                     {isSliderUploading ? <span style={{ fontSize: '10px', fontWeight: 800 }}>...</span> : <Camera size={20} />}
-                    <input type="file" accept="image/*" onChange={handleSliderImageUpload} disabled={isSliderUploading} style={{ display: 'none' }} />
+                    <input type="file" accept="image/*,video/*" onChange={handleSliderImageUpload} disabled={isSliderUploading} style={{ display: 'none' }} />
                  </label>
               </div>
               <input placeholder="LINK / CATEGORY" value={sliderData.link} onChange={e => setSliderData({...sliderData, link: e.target.value})} style={{ width: '100%', padding: '16px', border: 'var(--border-thin)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)', fontWeight: 800 }} />
