@@ -257,3 +257,269 @@ input:focus, textarea:focus, select:focus {
   to { transform: rotate(360deg); }
 }
 .spin { animation: spin 1s linear infinite; }
+
+/* ========================================================= */
+/* RECEIPT GENERATOR PRINT STYLES (DERIN TECH THEME)         */
+/* ========================================================= */
+
+.print-only-area {
+    display: none;
+}
+
+@media print {
+    @page {
+        size: A4;
+        margin: 0.5in;
+    }
+
+    body {
+        font-size: 12pt !important;
+        line-height: 1.4 !important;
+        color: black !important;
+        background: white !important;
+    }
+
+    /* Hide everything in the app except the print area */
+    body > * { display: none !important; }
+    #root { display: block !important; }
+    .no-print { display: none !important; }
+    .admin-sidebar { display: none !important; }
+    
+    .print-only-area {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        background: white !important;
+        color: black !important;
+        page-break-inside: avoid;
+    }
+
+    /* Force colors to print */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    /* Derin Tech Specific Invoice Styling */
+    .invoice-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 2pt solid #0d9488; /* tech-600 */
+        padding-bottom: 24pt;
+        margin-bottom: 24pt;
+    }
+
+    .invoice-branding {
+        display: flex;
+        align-items: center;
+        gap: 12pt;
+    }
+
+    .invoice-logo-container {
+        width: 64pt;
+        height: 64pt;
+        border: 1pt solid #e5e7eb;
+        border-radius: 8pt;
+        overflow: hidden;
+    }
+
+    .invoice-logo-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .invoice-brand-info h1 {
+        font-size: 24pt;
+        font-weight: 900;
+        color: #111827;
+        margin: 0;
+        letter-spacing: -0.02em;
+    }
+
+    .invoice-brand-info p {
+        font-size: 10pt;
+        color: #0d9488;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 0;
+    }
+
+    .invoice-meta {
+        text-align: right;
+    }
+
+    .invoice-meta h2 {
+        font-size: 30pt;
+        font-weight: 900;
+        color: #d1d5db;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin: 0 0 8pt 0;
+    }
+    
+    .invoice-meta .meta-details p {
+        color: #4b5563;
+        font-size: 10pt;
+        margin: 2pt 0;
+    }
+    
+    .invoice-meta .meta-details span {
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .invoice-addresses {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32pt;
+        margin-bottom: 24pt;
+    }
+
+    .invoice-addresses h3 {
+        font-size: 9pt;
+        font-weight: 700;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 8pt;
+    }
+
+    .strong-text {
+        font-weight: 700 !important;
+        color: #111827 !important;
+    }
+
+    .invoice-from p, .invoice-to p {
+        font-size: 10pt;
+        color: #374151;
+        margin: 4pt 0;
+    }
+
+    .invoice-to {
+        text-align: right;
+    }
+
+    .status-paid {
+        color: #15803d !important;
+        font-weight: 600;
+    }
+
+    .invoice-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        margin-bottom: 24pt;
+    }
+
+    .invoice-table th {
+        background-color: #f3f4f6 !important;
+        border-top: 1pt solid #9ca3af !important;
+        border-bottom: 1pt solid #9ca3af !important;
+        padding: 12pt;
+        font-size: 9pt;
+        font-weight: 700;
+        color: #1f2937;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .invoice-table td {
+        border-bottom: 1pt solid #d1d5db !important;
+        padding: 12pt;
+        font-size: 11pt;
+        color: #111827;
+    }
+
+    .invoice-table tfoot tr {
+        background-color: #f3f4f6 !important;
+        border-top: 2pt solid #9ca3af !important;
+    }
+
+    .invoice-table tfoot td {
+        padding: 12pt;
+        border: none !important;
+    }
+
+    .align-left { text-align: left; }
+    .align-center { text-align: center; }
+    .align-right { text-align: right; }
+    .width-sm { width: 64pt; }
+    .width-md { width: 96pt; }
+
+    .whitespace-pre-wrap { white-space: pre-wrap; }
+    .total-price { font-size: 16pt !important; font-weight: 900 !important; }
+
+    .invoice-terms {
+        border: 1pt solid #d1d5db;
+        background-color: #f9fafb !important;
+        padding: 16pt;
+        margin-bottom: 24pt;
+    }
+
+    .invoice-terms h4 {
+        font-weight: 700;
+        color: #111827;
+        font-size: 10pt;
+        margin: 0 0 8pt 0;
+    }
+
+    .terms-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16pt;
+        font-size: 9pt;
+        color: #374151;
+    }
+
+    .terms-grid p {
+        margin: 2pt 0;
+    }
+
+    .invoice-signatures {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48pt;
+        margin-top: 48pt;
+        margin-bottom: 16pt;
+    }
+
+    .signature-box {
+        text-align: center;
+    }
+
+    .signature-line {
+        border-bottom: 1pt solid #9ca3af;
+        margin: 0 24pt 4pt 24pt;
+    }
+
+    .signature-box p {
+        font-size: 9pt;
+        font-weight: 600;
+        color: #374151;
+        margin: 0;
+    }
+
+    .invoice-footer {
+        border-top: 1pt solid #9ca3af;
+        padding-top: 16pt;
+        text-align: center;
+    }
+
+    .footer-thanks {
+        color: #0d9488 !important;
+        font-weight: 700;
+        margin: 0 0 4pt 0;
+        font-size: 11pt;
+    }
+
+    .footer-quote {
+        font-size: 9pt;
+        color: #4b5563;
+        margin: 0;
+    }
+}

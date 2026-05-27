@@ -3,7 +3,7 @@ import {
   Plus, Search, Edit3, Trash2, Package, ShoppingCart,
   Users, MessageSquare, Layout, Settings, LogOut,
   ShieldAlert, Save, X, Camera, Info, BarChart2, TrendingUp, DollarSign,
-  AlertTriangle, Star, ShoppingBag, Loader2
+  AlertTriangle, Star, ShoppingBag, Loader2, FileText
 } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { supabase } from '../../supabase';
@@ -11,6 +11,7 @@ import EliteLoader from '../ui/EliteLoader';
 const ProductFormModal = lazy(() => import('./ProductFormModal'));
 const AdminChatInbox = lazy(() => import('./AdminChatInbox'));
 const InventoryIntelligence = lazy(() => import('../ui/InventoryIntelligence'));
+const ReceiptGenerator = lazy(() => import('./ReceiptGenerator'));
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { compressImageFile } from '../../utils/compressImage';
 
@@ -297,6 +298,7 @@ const AdminDashboard = ({ onExit }) => {
             { id: 'chat', label: 'CHAT INBOX', icon: <MessageSquare size={16} /> },
             { id: 'staff', label: 'STAFF CONTROL', icon: <Users size={16} />, ownerOnly: true },
             { id: 'sliders', label: 'CAROUSELS', icon: <Layout size={16} />, ownerOnly: true },
+            { id: 'receipts', label: 'RECEIPT GEN', icon: <FileText size={16} />, ownerOnly: true },
             { id: 'reviews', label: 'CLIENT REVIEWS', icon: <Star size={16} />, ownerOnly: true },
             { id: 'settings', label: 'SETTINGS', icon: <Settings size={16} />, ownerOnly: true },
           ].map(item => (
