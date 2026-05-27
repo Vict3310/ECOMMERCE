@@ -57,18 +57,35 @@ const FeedCarousel = ({ onExplore }) => {
               }}
               className="feed-card"
             >
-               <img 
-                  src={item.image.includes('unsplash.com') ? `${item.image.split('?')[0]}?auto=format&fit=crop&q=80&w=800` : item.image} 
-                  alt={item.title} 
-                  loading="lazy"
-                  style={{ 
-                    position: 'absolute', inset: 0, 
-                    width: '100%', height: '100%', 
-                    objectFit: 'cover',
-                    filter: 'grayscale(1) brightness(0.8)', transition: 'transform 0.8s'
-                  }} 
-                  className="card-bg" 
-               />
+               {item.image?.match(/\.(mp4|webm|mov|ogg)$/i) ? (
+                 <video 
+                    src={item.image} 
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    style={{ 
+                      position: 'absolute', inset: 0, 
+                      width: '100%', height: '100%', 
+                      objectFit: 'cover',
+                      filter: 'brightness(0.8)', transition: 'transform 0.8s'
+                    }} 
+                    className="card-bg" 
+                 />
+               ) : (
+                 <img 
+                    src={item.image.includes('unsplash.com') ? `${item.image.split('?')[0]}?auto=format&fit=crop&q=80&w=800` : item.image} 
+                    alt={item.title} 
+                    loading="lazy"
+                    style={{ 
+                      position: 'absolute', inset: 0, 
+                      width: '100%', height: '100%', 
+                      objectFit: 'cover',
+                      filter: 'brightness(0.8)', transition: 'transform 0.8s'
+                    }} 
+                    className="card-bg" 
+                 />
+               )}
                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)' }} />
                <div style={{ position: 'absolute', bottom: '40px', left: '40px', right: '40px' }}>
                   <span style={{ fontSize: '9px', fontWeight: 800, letterSpacing: '0.2em', color: '#FFF', opacity: 0.5, textTransform: 'uppercase' }}>{item.category}</span>
