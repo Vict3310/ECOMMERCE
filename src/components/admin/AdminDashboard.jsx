@@ -3,7 +3,7 @@ import {
   Plus, Search, Edit3, Trash2, Package, ShoppingCart,
   Users, MessageSquare, Layout, Settings, LogOut,
   ShieldAlert, Save, X, Camera, Info, BarChart2, TrendingUp, DollarSign,
-  AlertTriangle, Star, ShoppingBag
+  AlertTriangle, Star, ShoppingBag, Loader2
 } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { supabase } from '../../supabase';
@@ -104,6 +104,7 @@ const AdminDashboard = ({ onExit }) => {
     }
 
     setIsSliderUploading(true);
+    showNotification('UPLOADING MEDIA TO SECURE STORAGE...', 'info');
     try {
       let prepared = file;
       if (!isVideo) {
@@ -117,6 +118,7 @@ const AdminDashboard = ({ onExit }) => {
       const { data: { publicUrl } } = supabase.storage.from('site-assets').getPublicUrl(fileName);
       
       setSliderData(prev => ({ ...prev, image: publicUrl }));
+      showNotification('UPLOAD COMPLETE.', 'success');
     } catch (error) {
       console.error("Storage Error Details:", error);
       showNotification(`Upload failed: ${error.message || 'Unknown error'}`, 'error');
@@ -908,7 +910,7 @@ const AdminDashboard = ({ onExit }) => {
               <div style={{ display: 'flex', gap: '8px' }}>
                  <input placeholder="IMAGE URL" value={sliderData.image} onChange={e => setSliderData({...sliderData, image: e.target.value})} style={{ flex: 1, padding: '16px', border: 'var(--border-thin)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)', fontWeight: 800 }} />
                  <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', backgroundColor: 'var(--bg-secondary)', border: 'var(--border-thin)', cursor: 'pointer', color: 'var(--text-primary)' }}>
-                    {isSliderUploading ? <span style={{ fontSize: '10px', fontWeight: 800 }}>...</span> : <Camera size={20} />}
+                    {isSliderUploading ? <Loader2 size={20} className="spin" /> : <Camera size={20} />}
                     <input type="file" accept="image/*,video/*" onChange={handleSliderImageUpload} disabled={isSliderUploading} style={{ display: 'none' }} />
                  </label>
               </div>
