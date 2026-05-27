@@ -99,11 +99,11 @@ const AdminDashboard = ({ onExit }) => {
 
     setIsSliderUploading(true);
     try {
-      const prepared = await compressImageFile(file);
+      const prepared = await compressImageFile(file, { maxDim: 1200, quality: 0.6 });
       const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}-${prepared.name}`;
-      const { error: uploadError } = await supabase.storage.from('products').upload(fileName, prepared);
+      const { error: uploadError } = await supabase.storage.from('site-assets').upload(fileName, prepared);
       if (uploadError) throw uploadError;
-      const { data: { publicUrl } } = supabase.storage.from('products').getPublicUrl(fileName);
+      const { data: { publicUrl } } = supabase.storage.from('site-assets').getPublicUrl(fileName);
       
       setSliderData(prev => ({ ...prev, image: publicUrl }));
     } catch (error) {

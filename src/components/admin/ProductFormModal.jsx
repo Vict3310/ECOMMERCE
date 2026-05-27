@@ -80,9 +80,9 @@ const ProductFormModal = ({ isOpen, onClose, product = null }) => {
       for (const file of toUpload) {
         const prepared = await compressImageFile(file);
         const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}-${prepared.name}`;
-        const { error: uploadError } = await supabase.storage.from('products').upload(fileName, prepared);
+        const { error: uploadError } = await supabase.storage.from('product-images').upload(fileName, prepared);
         if (uploadError) throw uploadError;
-        const { data: { publicUrl } } = supabase.storage.from('products').getPublicUrl(fileName);
+        const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(fileName);
         newUrls.push(publicUrl);
       }
       setFormData((prev) => {
