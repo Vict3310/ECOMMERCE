@@ -3,7 +3,7 @@ import {
   Plus, Search, Edit3, Trash2, Package, ShoppingCart,
   Users, MessageSquare, Layout, Settings, LogOut,
   ShieldAlert, Save, X, Camera, Info, BarChart2, TrendingUp, DollarSign,
-  AlertTriangle, Star, ShoppingBag, Loader2, FileText
+  AlertTriangle, Star, ShoppingBag, Loader2, FileText, Mail, Download
 } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { supabase } from '../../supabase';
@@ -23,6 +23,8 @@ const AdminDashboard = ({ onExit }) => {
   } = useAppContext();
   
   const [activeTab, setActiveTab] = useState('products');
+  const [marketingContacts, setMarketingContacts] = useState([]);
+  const [contactsLoading, setContactsLoading] = useState(false);
   const [bulkPercentage, setBulkPercentage] = useState(0);
   const [isBulkLoading, setIsBulkLoading] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -38,6 +40,13 @@ const AdminDashboard = ({ onExit }) => {
   const [allReviews, setAllReviews] = useState([]);
   const [isInventoryIntelligenceOpen, setIsInventoryIntelligenceOpen] = useState(false);
   const [isSliderUploading, setIsSliderUploading] = useState(false);
+
+  useEffect(() => {
+    if (activeTab !== 'marketing') return;
+    setContactsLoading(true);
+    supabase.from('marketing_contacts').select('*').order('created_at', { ascending: false })
+      .then(({ data }) => { if (data) setMarketingContacts(data); setContactsLoading(false); });
+  }, [activeTab]);
 
   useEffect(() => {
     if (selectedSlider) setSliderData(selectedSlider);
@@ -292,6 +301,7 @@ const AdminDashboard = ({ onExit }) => {
             { id: 'staff', label: 'STAFF CONTROL', icon: <Users size={16} />, ownerOnly: true },
             { id: 'sliders', label: 'CAROUSELS', icon: <Layout size={16} />, ownerOnly: true },
             { id: 'receipts', label: 'RECEIPT GEN', icon: <FileText size={16} />, ownerOnly: true },
+            { id: 'marketing', label: 'MARKETING LIST', icon: <Mail size={16} />, ownerOnly: true },
             { id: 'reviews', label: 'CLIENT REVIEWS', icon: <Star size={16} />, ownerOnly: true },
             { id: 'settings', label: 'SETTINGS', icon: <Settings size={16} />, ownerOnly: true },
           ].map(item => (
@@ -604,6 +614,54 @@ const AdminDashboard = ({ onExit }) => {
                  )}
               </div>
            </div>
+        )}
+
+        {isOwner && activeTab === 'marketing' && (
+          <div className="fade-in">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px', flexWrap: 'wrap', gap: '16px' }}>
+              <div>
+                <h2 style={{ fontSize: '40px', fontWeight: 900, letterSpacing: '-0.05em', lineHeight: 1 }}>Marketing.</h2>
+                <p style={{ fontSize: '11px', opacity: 0.4, fontWeight: 700, marginTop: '6px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{marketingContacts.length} contacts collected from receipts</p>
+              </div>
+              <button
+                onClick={() => {
+                  const csv = ['Name,Phone,Email,Date']
+                    .concat(marketingContacts.map(c => `"${c.name || ''}","${c.phone || ''}","${c.email || ''}","${new Date(c.created_at).toLocaleDateString('en-GB')}"`));
+                  const blob = new Blob([csv.join('\n')], { type: 'text/csv' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a'); a.href = url; a.download = 'marketing_contacts.csv'; a.click();
+                  URL.revokeObjectURL(url);
+                }}
+                style={{ padding: '12px 24px', backgroundColor: 'var(--brand-blue)', color: '#fff', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', border: 'none' }}
+              >
+                <Download size={14} /> EXPORT CSV
+              </button>
+            </div>
+
+            <div style={{ display: 'grid', border: 'var(--border-thin)', backgroundColor: 'var(--border-thin)', gap: '1px' }}>
+              {/* Header */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 120px', gap: '16px', padding: '12px 24px', backgroundColor: 'var(--bg-secondary)' }}>
+                {['Name', 'Phone', 'Email', 'Added'].map(h => (
+                  <span key={h} style={{ fontSize: '9px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.5 }}>{h}</span>
+                ))}
+              </div>
+              {contactsLoading && <div style={{ padding: '40px', textAlign: 'center', backgroundColor: 'var(--bg-primary)', fontSize: '11px', opacity: 0.4 }}>Loading...</div>}
+              {!contactsLoading && marketingContacts.length === 0 && (
+                <div style={{ padding: '80px', textAlign: 'center', backgroundColor: 'var(--bg-primary)', opacity: 0.3 }}>
+                  <Mail size={40} style={{ marginBottom: '16px' }} />
+                  <p style={{ fontSize: '12px', fontWeight: 800, letterSpacing: '0.2em' }}>NO CONTACTS YET. GENERATE RECEIPTS TO BUILD YOUR LIST.</p>
+                </div>
+              )}
+              {marketingContacts.map(c => (
+                <div key={c.id} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 120px', gap: '16px', alignItems: 'center', padding: '18px 24px', backgroundColor: 'var(--bg-primary)' }}>
+                  <span style={{ fontSize: '13px', fontWeight: 700 }}>{c.name || '—'}</span>
+                  <span style={{ fontSize: '12px', opacity: 0.8 }}>{c.phone || '—'}</span>
+                  <span style={{ fontSize: '12px', opacity: 0.8 }}>{c.email || '—'}</span>
+                  <span style={{ fontSize: '10px', opacity: 0.5 }}>{new Date(c.created_at).toLocaleDateString('en-GB')}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
 
         {isOwner && activeTab === 'inventory-intelligence' && (

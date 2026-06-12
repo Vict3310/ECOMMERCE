@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../../context/AppContext';
-import { FileText, Printer, Plus, Trash2, Eye, RotateCcw } from 'lucide-react';
+import { FileText, Printer, Plus, Trash2, Eye, RotateCcw, Clock, ChevronDown, ChevronUp } from 'lucide-react';
+import { supabase } from '../../supabase';
 
 const INPUT_STYLE = {
   width: '100%', padding: '14px 16px',
@@ -38,6 +39,22 @@ const ReceiptGenerator = () => {
 
   const [lineItems, setLineItems] = useState([{ ...EMPTY_LINE }]);
   const [receipt, setReceipt] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(false);
+
+  const fetchHistory = async () => {
+    setHistoryLoading(true);
+    const { data } = await supabase
+      .from('receipt_history')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(50);
+    if (data) setHistory(data);
+    setHistoryLoading(false);
+  };
+
+  useEffect(() => { fetchHistory(); }, []);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -77,6 +94,7 @@ const ReceiptGenerator = () => {
 
     setReceipt({
       ...form,
+      customerEmail: form.customerEmail || '',
       id: 'INV-' + Math.floor(100000 + Math.random() * 900000),
       formattedDate: new Date(form.date).toLocaleDateString('en-GB', {
         day: '2-digit', month: 'long', year: 'numeric'
@@ -91,20 +109,44 @@ const ReceiptGenerator = () => {
     });
   };
 
-  const handlePrint = () => {
+  const handlePrint = async () => {
     if (!receipt) {
       showNotification('Generate the receipt preview first.', 'error');
       return;
     }
+    // Save receipt history
+    await supabase.from('receipt_history').insert({
+      receipt_id: receipt.id,
+      customer_name: receipt.customerName,
+      customer_phone: receipt.customerPhone || null,
+      customer_email: receipt.customerEmail || null,
+      customer_address: receipt.customerAddress || null,
+      total: receipt.total,
+      status: receipt.status,
+      method: receipt.method,
+      line_items: receipt.lineItems,
+      date: receipt.date,
+      notes: receipt.notes || null,
+      discount: receipt.discountAmt || 0,
+    });
+    // Upsert marketing contact
+    if (receipt.customerPhone || receipt.customerEmail) {
+      await supabase.from('marketing_contacts').upsert(
+        { name: receipt.customerName, phone: receipt.customerPhone || null, email: receipt.customerEmail || null },
+        { onConflict: 'phone' }
+      );
+    }
+    fetchHistory();
     const originalTitle = document.title;
     document.title = `Receipt ${receipt.id} – ${siteSettings?.name || 'Store'}`;
     window.print();
     document.title = originalTitle;
+    showNotification('Receipt saved to history.', 'success');
   };
 
   const handleReset = () => {
     setForm({
-      customerName: '', customerPhone: '', customerAddress: '',
+      customerName: '', customerPhone: '', customerEmail: '', customerAddress: '',
       date: new Date().toISOString().split('T')[0],
       method: 'Cash', warranty: '7 days', notes: '', discount: '', status: 'PAID',
     });
@@ -138,6 +180,63 @@ const ReceiptGenerator = () => {
           </div>
         </div>
 
+        {/* ── HISTORY PANEL ── */}
+        <div style={{ marginBottom: '32px', border: 'var(--border-thin)', backgroundColor: 'var(--bg-secondary)' }}>
+          <button
+            onClick={() => setShowHistory(h => !h)}
+            style={{ width: '100%', padding: '18px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-primary)' }}
+          >
+            <span style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              <Clock size={14} /> RECEIPT HISTORY ({history.length})
+            </span>
+            {showHistory ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
+          {showHistory && (
+            <div style={{ borderTop: 'var(--border-thin)', maxHeight: '380px', overflowY: 'auto' }}>
+              {historyLoading && <p style={{ padding: '24px', fontSize: '11px', opacity: 0.5 }}>Loading...</p>}
+              {!historyLoading && history.length === 0 && (
+                <p style={{ padding: '24px', fontSize: '11px', opacity: 0.4, textAlign: 'center' }}>No receipts generated yet.</p>
+              )}
+              {history.map(h => (
+                <div key={h.id} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 100px 60px', gap: '16px', alignItems: 'center', padding: '14px 24px', borderBottom: 'var(--border-thin)' }}>
+                  <div>
+                    <p style={{ fontSize: '11px', fontWeight: 800 }}>{h.receipt_id}</p>
+                    <p style={{ fontSize: '9px', opacity: 0.5 }}>{new Date(h.created_at).toLocaleDateString('en-GB')}</p>
+                  </div>
+                  <div>
+                    <p style={{ fontSize: '11px', fontWeight: 700 }}>{h.customer_name}</p>
+                    <p style={{ fontSize: '9px', opacity: 0.5 }}>{h.customer_phone || h.customer_email || '—'}</p>
+                  </div>
+                  <div>
+                    <p style={{ fontSize: '12px', fontWeight: 900 }}>{fmt(h.total)}</p>
+                    <p style={{ fontSize: '9px', opacity: 0.5, textTransform: 'uppercase' }}>{h.status}</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      const items = h.line_items || [];
+                      const subtotal = items.reduce((s, i) => s + (i.total || 0), 0);
+                      setReceipt({
+                        ...h,
+                        customerName: h.customer_name,
+                        customerPhone: h.customer_phone,
+                        customerEmail: h.customer_email,
+                        customerAddress: h.customer_address,
+                        formattedDate: new Date(h.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }),
+                        lineItems: items,
+                        subtotal,
+                        discountAmt: h.discount || 0,
+                      });
+                    }}
+                    style={{ padding: '8px', border: 'var(--border-thin)', fontSize: '9px', fontWeight: 800, cursor: 'pointer', color: 'var(--text-primary)', background: 'none', textTransform: 'uppercase' }}
+                  >
+                    VIEW
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Two-column layout: form + preview */}
         <div style={{ display: 'grid', gridTemplateColumns: receipt ? '1fr 1fr' : '1fr', gap: '24px', alignItems: 'start' }}>
 
@@ -155,6 +254,10 @@ const ReceiptGenerator = () => {
                 <div>
                   <label style={LABEL_STYLE}>Phone Number</label>
                   <input name="customerPhone" value={form.customerPhone} onChange={handleChange} placeholder="08012345678" style={INPUT_STYLE} />
+                </div>
+                <div>
+                  <label style={LABEL_STYLE}>Email (Optional)</label>
+                  <input name="customerEmail" value={form.customerEmail || ''} onChange={handleChange} placeholder="customer@email.com" style={INPUT_STYLE} />
                 </div>
                 <div>
                   <label style={LABEL_STYLE}>Date</label>

@@ -180,3 +180,36 @@ CREATE POLICY "Admins can update objects" ON storage.objects FOR UPDATE USING (
 CREATE POLICY "Admins can delete objects" ON storage.objects FOR DELETE USING (
   EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role IN ('admin', 'owner'))
 );
+
+-- 9. Receipt History Table
+CREATE TABLE public.receipt_history (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  receipt_id TEXT NOT NULL,
+  customer_name TEXT NOT NULL,
+  customer_phone TEXT,
+  customer_email TEXT,
+  customer_address TEXT,
+  total NUMERIC NOT NULL,
+  status TEXT,
+  method TEXT,
+  line_items JSONB,
+  date TEXT,
+  notes TEXT,
+  discount NUMERIC DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE public.receipt_history ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Admins can manage receipt history" ON public.receipt_history FOR ALL
+  USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role IN ('admin', 'owner')));
+
+-- 10. Marketing Contacts Table
+CREATE TABLE public.marketing_contacts (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  name TEXT,
+  phone TEXT UNIQUE,
+  email TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE public.marketing_contacts ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Admins can manage marketing contacts" ON public.marketing_contacts FOR ALL
+  USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role IN ('admin', 'owner')));
