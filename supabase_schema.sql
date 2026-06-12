@@ -213,3 +213,39 @@ CREATE TABLE public.marketing_contacts (
 ALTER TABLE public.marketing_contacts ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Admins can manage marketing contacts" ON public.marketing_contacts FOR ALL
   USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role IN ('admin', 'owner')));
+
+-- 11. Expenses Table
+CREATE TABLE public.expenses (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  category TEXT NOT NULL,
+  amount NUMERIC NOT NULL,
+  description TEXT,
+  date TEXT NOT NULL,
+  created_by UUID REFERENCES auth.users(id),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE public.expenses ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Admins can manage expenses" ON public.expenses FOR ALL
+  USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role IN ('admin', 'owner', 'worker')));
+
+-- 12. Repair Tickets Table
+CREATE TABLE public.repair_tickets (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  tracking_id TEXT UNIQUE NOT NULL,
+  customer_name TEXT NOT NULL,
+  customer_phone TEXT NOT NULL,
+  device_model TEXT NOT NULL,
+  issue_description TEXT NOT NULL,
+  status TEXT DEFAULT 'Diagnosing', -- Diagnosing, Awaiting Parts, Repairing, Ready, Completed
+  estimated_cost NUMERIC,
+  actual_cost NUMERIC,
+  deposit_paid NUMERIC DEFAULT 0,
+  notes TEXT,
+  created_by UUID REFERENCES auth.users(id),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE public.repair_tickets ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Admins can manage repair tickets" ON public.repair_tickets FOR ALL
+  USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role IN ('admin', 'owner', 'worker')));
+
