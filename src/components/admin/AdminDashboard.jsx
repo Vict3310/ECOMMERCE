@@ -3,7 +3,7 @@ import {
   Plus, Search, Edit3, Trash2, Package, ShoppingCart,
   Users, MessageSquare, Layout, Settings, LogOut,
   ShieldAlert, Save, X, Camera, Info, BarChart2, TrendingUp, DollarSign,
-  AlertTriangle, Star, ShoppingBag, Loader2, FileText, Mail, Download, Tool, Wallet
+  AlertTriangle, Star, ShoppingBag, Loader2, FileText, Mail, Download, Wrench, Wallet
 } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { supabase } from '../../supabase';
@@ -297,7 +297,7 @@ const AdminDashboard = ({ onExit }) => {
             { id: 'staff', label: 'STAFF CONTROL', icon: <Users size={16} />, ownerOnly: true },
             { id: 'sliders', label: 'CAROUSELS', icon: <Layout size={16} />, ownerOnly: true },
             { id: 'receipts', label: 'RECEIPT GEN', icon: <FileText size={16} />, ownerOnly: true },
-            { id: 'repairs', label: 'REPAIRS', icon: <Tool size={16} />, ownerOnly: true },
+            { id: 'repairs', label: 'REPAIRS', icon: <Wrench size={16} />, ownerOnly: true },
             { id: 'marketing', label: 'MARKETING LIST', icon: <Mail size={16} />, ownerOnly: true },
             { id: 'reviews', label: 'CLIENT REVIEWS', icon: <Star size={16} />, ownerOnly: true },
             { id: 'accounting', label: 'ACCOUNTING', icon: <Wallet size={16} />, ownerOnly: true },

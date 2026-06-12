@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../supabase';
-import { Settings, Tool, Plus, Edit3, Trash2, CheckCircle, Clock, AlertTriangle, Phone, FileText } from 'lucide-react';
+import { Settings, Wrench, Plus, Edit3, Trash2, CheckCircle, Clock, AlertTriangle, Phone, FileText } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 
 const STATUS_OPTIONS = ['Diagnosing', 'Awaiting Parts', 'Repairing', 'Ready', 'Completed'];
@@ -174,7 +174,7 @@ const RepairManager = () => {
             <div style={{ padding: '60px', textAlign: 'center', opacity: 0.4, fontSize: '12px' }}>Loading Tickets...</div>
           ) : tickets.length === 0 ? (
             <div style={{ padding: '60px', textAlign: 'center', opacity: 0.3, border: 'var(--border-thin)', backgroundColor: 'var(--bg-primary)' }}>
-              <Tool size={32} style={{ marginBottom: '16px', margin: '0 auto' }} />
+              <Wrench size={32} style={{ marginBottom: '16px', margin: '0 auto' }} />
               <p style={{ fontSize: '12px', fontWeight: 800, letterSpacing: '0.1em' }}>NO REPAIR TICKETS YET.</p>
             </div>
           ) : (
