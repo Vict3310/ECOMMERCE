@@ -23,7 +23,7 @@ A production-grade React + Vite e-commerce application with **Supabase backend**
 
 ### Customer Experience
 - **Home**: Hero carousel, feed carousel, product recommendations
-- **Shop**: Advanced search, filter sidebar (price, brand condition storage color condition stock), category chips
+- **Shop**: Advanced search, filter sidebar (price, brand, condition, storage, color, stock), category chips
 - **Product Detail**: Image magnifier, specs comparison, review section, dual pricing (brand-new / UK-used)
 - **Cart Drawer**: Persistent side cart with order flow
 - **Wishlist**: Folders, device sync, shareable lists
