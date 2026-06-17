@@ -20,7 +20,7 @@ import { compressImageFile } from '../../utils/compressImage';
 
 const AdminDashboard = ({ onExit }) => {
   const { 
-    products, siteSettings, setSiteSettings, updateSiteSettings,
+    products, setProducts, siteSettings, setSiteSettings, updateSiteSettings,
     orders, loadMoreOrders, downloadInvoice, user, userProfile, loginWithGoogle, logout,
     bulkUpdatePrices, heroSlides, feedItems, showNotification, showConfirmDialog, updateOrderStatus
   } = useAppContext();
@@ -375,8 +375,12 @@ const AdminDashboard = ({ onExit }) => {
                                danger: true,
                                onConfirm: async () => {
                                  const { error } = await supabase.from('products').delete().eq('id', p.id);
-                                 if (error) showNotification(error.message, 'error');
-                                 else showNotification('Product removed from catalog.', 'success');
+                                 if (error) {
+                                   showNotification(error.message, 'error');
+                                   return;
+                                 }
+                                 setProducts(prev => prev.filter(item => item.id !== p.id));
+                                 showNotification('Product removed from catalog.', 'success');
                                },
                              })} style={{ padding: '12px', border: 'var(--border-thin)', borderRadius: '2px', color: '#FF3B3B', cursor: 'pointer' }}><Trash2 size={14} /></button>
                        </div>

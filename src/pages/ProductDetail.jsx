@@ -62,7 +62,7 @@ function ProductDetailImageColumn({ product }) {
 }
 
 const ProductDetail = ({ product, onBack, onNavigate }) => {
-  const { siteSettings, addToCart, formatPrice, toggleWishlist, wishlist, products } = useAppContext();
+  const { siteSettings, addToCart, formatPrice, toggleWishlist, wishlist, products, showNotification } = useAppContext();
   const isWishlisted = wishlist?.find(p => p.id === product?.id);
   const condition = 'brandNew';
   const [selectedColor, setSelectedColor] = useState(product?.colors?.[0] || 'Standard');

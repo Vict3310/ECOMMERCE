@@ -101,7 +101,7 @@ const CartDrawer = ({ isOpen, onClose, onOrderComplete }) => {
       
       const message = `📦 *NEW ORDER - ${siteSettings?.name?.toUpperCase() || 'BRAND'}*%0A%0A` +
                       `🆔 *Order ID:* #${orderId}%0A` +
-                      `👤 *Customer:* ${userProfile?.displayName || 'Elite Client'}%0A` +
+                      `👤 *Customer:* ${userProfile?.display_name || userProfile?.displayName || 'Elite Client'}%0A` +
                       `📧 *Email:* ${sanitizedEmail}%0A` +
                       `📍 *Logistics:* ${selectedLocation.toUpperCase()}%0A%0A` +
                       `🛒 *INVENTORY SELECTION:*%0A${itemDetails}%0A%0A` +

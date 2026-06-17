@@ -75,7 +75,8 @@ const ReviewSection = ({ productId }) => {
       const currentReview = reviews.find(r => r.id === reviewId);
       if (!currentReview) return;
 
-      const hasVoted = currentReview.votedBy?.[user.uid];
+      const userId = user.id;
+      const hasVoted = currentReview.votedBy?.[userId];
       if (hasVoted) {
         showNotification("You have already voted on this review.", 'info');
         return;
@@ -83,7 +84,7 @@ const ReviewSection = ({ productId }) => {
 
       const updates = {
         [voteType]: (currentReview[voteType] || 0) + 1,
-        voted_by: { ...(currentReview.votedBy || {}), [user.uid]: voteType }
+        voted_by: { ...(currentReview.votedBy || {}), [userId]: voteType }
       };
 
       await supabase.from('reviews').update(updates).eq('id', reviewId);
@@ -96,12 +97,13 @@ const ReviewSection = ({ productId }) => {
     if (!user || !replyText.trim()) return;
 
     try {
+      const userId = user.id;
       const currentReview = reviews.find(r => r.id === reviewId);
       if (!currentReview) return;
       const newReplies = Array.isArray(currentReview.replies) ? [...currentReview.replies] : [];
       newReplies.push({
-        uid: user.uid,
-        userName: userProfile?.displayName || user.displayName || 'Elite Client',
+        uid: userId,
+        userName: userProfile?.display_name || userProfile?.displayName || user.user_metadata?.full_name || 'Elite Client',
         text: sanitizeString(replyText),
         createdAt: new Date().toISOString()
       });
@@ -126,10 +128,11 @@ const ReviewSection = ({ productId }) => {
 
     setIsSubmitting(true);
     try {
+      const userId = user.id;
       await supabase.from('reviews').insert({
         product_id: productId,
-        uid: user.uid,
-        user_name: userProfile?.displayName || user.displayName || 'Elite Client',
+        uid: userId,
+        user_name: userProfile?.display_name || userProfile?.displayName || user.user_metadata?.full_name || 'Elite Client',
         rating,
         comment: sanitizeString(comment),
         photo_url: sanitizeString(photoUrl),

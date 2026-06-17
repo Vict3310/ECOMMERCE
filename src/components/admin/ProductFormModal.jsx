@@ -163,18 +163,24 @@ const ProductFormModal = ({ isOpen, onClose, product = null }) => {
       return;
     }
     const normalizedProduct = {
-      ...product,
-      ...formData,
-      image: imgs[0],
-      images: imgs,
-      stock: Number(formData.stock || 0),
+      id: product?.id,
+      name: String(formData.name || '').trim(),
+      brand: String(formData.brand || '').trim(),
+      category: formData.category,
       prices: {
         brandNew: Number(formData.prices?.brandNew || 0),
-        ukUsed: Number(formData.prices?.ukUsed || 0)
+        ukUsed: Number(formData.prices?.ukUsed || 0),
       },
-      isDeal: Boolean(formData.isDeal),
+      colors: Array.isArray(formData.colors) ? formData.colors : [],
       specs: formData.specs || {},
-      updatedAt: new Date().toISOString()
+      description: formData.description || '',
+      image: imgs[0],
+      images: imgs,
+      trending: Boolean(product?.trending),
+      isDeal: Boolean(formData.isDeal),
+      rating: product?.rating ?? null,
+      stock: Number(formData.stock || 0),
+      created_at: product?.created_at,
     };
 
     setSaveStatus('pending');

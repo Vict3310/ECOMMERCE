@@ -47,8 +47,7 @@ const Orders = () => {
   const myOrders = useMemo(() => {
      if (!user) return [];
      return orders.filter(o => 
-       (user?.email && o.email === user.email) || 
-       (user?.uid && o.userId === user.uid)
+       user?.email && o.email === user.email
      );
   }, [orders, user]);
 

@@ -15,7 +15,7 @@ const LiveChatWidget = () => {
   // Sync to actual UID if logged in
   useEffect(() => {
     if (user) {
-      setSessionId(user.uid);
+      setSessionId(user.id);
       return;
     }
 

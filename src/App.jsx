@@ -87,16 +87,23 @@ const AppContent = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    gsap.fromTo('main', { opacity: 0.88 }, { opacity: 1, duration: 0.4 });
-  }, [location.pathname]);
+    const mainElement = document.querySelector('main');
+    if (!loading && mainElement) {
+      gsap.fromTo(mainElement, { opacity: 0.88 }, { opacity: 1, duration: 0.4 });
+    }
+  }, [location.pathname, loading]);
 
   useEffect(() => {
+    if (loading) return;
+    const floatingAuth = document.querySelector('.floating-auth');
+    if (!floatingAuth) return;
+
     gsap.fromTo(
-      '.floating-auth',
+      floatingAuth,
       { scale: 0, opacity: 0, y: 50 },
       { scale: 1, opacity: 1, y: 0, duration: 1.2, ease: 'elastic.out(1, 0.5)', delay: 1.5 }
     );
-  }, []);
+  }, [loading, location.pathname]);
 
   const appNavigate = useCallback(
     (to, arg2, category = 'all') => {
