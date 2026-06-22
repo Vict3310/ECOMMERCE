@@ -57,21 +57,21 @@ A production-grade React + Vite e-commerce application with **Supabase backend**
 
 ```
 src/
-├── components/
-│   ├── admin/          # Admin dashboard components
-│   ├── cart/           # Cart drawer, order tracking
-│   ├── chat/           # Live chat widget
-│   ├── home/           # Carousels, recommendations
-│   ├── layout/         # Navbar, search, filters, wishlist
-│   ├── product/        # Cards, grid, magnifier, reviews, comparison
-│   └── ui/             # Loaders, lightbox, error boundary, loyalty, inventory
-├── config/             # Template defaults (branding, contact)
-├── context/            # AppContext — global state + Supabase sync
-├── data/               # Initial product catalog
-├── pages/              # Route-level components
-├── utils/              # Order IDs, paths, image compression, security
-├── supabase.js         # Supabase client
-└── main.jsx            # Entry point
+    \u251c\u2500\u2500 components/
+    \u251c    \u2500\u2500 admin/          # Admin dashboard components
+    \u251c    \u2500\u2500 cart/           # Cart drawer, order tracking
+    \u251c    \u2500\u2500 chat/           # Live chat widget
+    \u251c    \u2500\u2500 home/           # Carousels, recommendations
+    \u251c    \u2500\u2500 layout/         # Navbar, search, filters, wishlist
+    \u251c    \u2500\u2500 product/        # Cards, grid, magnifier, reviews, comparison
+    \u251c    \u2500\u2500 ui/             # Loaders, lightbox, error boundary, loyalty, inventory
+    \u2514\u2500\u2500 config/             # Template defaults (branding, contact)
+    \u2514\u2500\u2500 context/            # AppContext \u2014 global state + Supabase sync
+    \u2514\u2500\u2500 data/               # Initial product catalog
+    \u2514\u2500\u2500 pages/              # Route-level components
+    \u2514\u2500\u2500 utils/              # Order IDs, paths, image compression, security
+    \u2514\u2500\u2500 supabase.js         # Supabase client
+    \u2514\u2500\u2500 main.jsx            # Entry point
 ```
 
 ---
@@ -139,14 +139,14 @@ npm run preview
 ## Admin Access
 
 1. Sign up via UI
-2. In Supabase dashboard, edit `users` table → set `role = 'admin'` for your user
+2. In Supabase dashboard, edit `users` table \u2192 set `role = 'admin'` for your user
 3. Visit `/admin`
 
 ---
 
 ## License
 
-Private / Proprietary — **IFECO / DERIN TECH**
+Private / Proprietary \u2014 **IFECO / DERIN TECH**
 
 ---
 
