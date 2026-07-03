@@ -137,6 +137,16 @@ export const AppProvider = ({ children }) => {
            };
            const { error: insertError } = await supabase.from('users').insert(newProfile);
            if (insertError) {
+             // If it's a duplicate key conflict, the profile likely exists — fetch it
+             if (insertError.code === '23505') {
+               const { data: existingProfile } = await supabase.from('users').select('*').eq('id', currentUser.id).single();
+               if (existingProfile) {
+                 setUserProfile(existingProfile);
+                 localStorage.setItem('ifeco-user-profile', JSON.stringify(existingProfile));
+                 setLoading(false);
+                 return;
+               }
+             }
              console.error('Failed to create user profile:', insertError);
              showNotification(`Failed to create user profile: ${insertError.message}`, 'error');
            } else {
