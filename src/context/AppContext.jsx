@@ -120,13 +120,17 @@ export const AppProvider = ({ children }) => {
 
     const handleSession = async (session) => {
       const currentUser = session?.user;
+      console.log('[AppContext] Auth state change:', currentUser?.id ? 'logged in' : 'logged out');
       setUser(currentUser);
-      
+
       if (currentUser) {
-        const { data: profile } = await supabase.from('users').select('*').eq('id', currentUser.id).single();
+        console.log('[AppContext] Fetching user profile for:', currentUser.id);
+        const { data: profile, error: profileErr } = await supabase.from('users').select('*').eq('id', currentUser.id).single();
+        console.log('[AppContext] Profile result:', { profile, error: profileErr });
         if (profile) {
            setUserProfile(profile);
            localStorage.setItem('ifeco-user-profile', JSON.stringify(profile));
+           console.log('[AppContext] User role:', profile.role);
            setLoading(false);
         } else {
            const newProfile = {

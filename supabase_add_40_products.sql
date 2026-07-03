@@ -1,0 +1,60 @@
+-- ============================================
+-- Add 40 Real Products to Supabase
+-- Run this in Supabase SQL Editor
+-- ============================================
+
+INSERT INTO public.products (id, name, brand, category, prices, description, image, trending, "isDeal", stock, created_at) VALUES
+('iphone-16-pro-max', 'iPhone 16 Pro Max', 'Apple', 'Phones', '{"brandNew": 1499, "ukUsed": 1249}', 'The most powerful iPhone ever. A18 Pro chip, 48MP camera system, titanium design, 6.9" display', 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&q=80&w=1000', true, true, 50, NOW()),
+('iphone-16-pro', 'iPhone 16 Pro', 'Apple', 'Phones', '{"brandNew": 1299, "ukUsed": 1099}', 'Pro performance in a compact titanium design. Dynamic Island, Action Button, 48MP camera', 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&q=80&w=1000', true, false, 45, NOW()),
+('iphone-16', 'iPhone 16', 'Apple', 'Phones', '{"brandNew": 799, "ukUsed": 679}', 'Great performance, excellent camera, and beautiful design. A18 chip, 48MP camera', 'https://images.unsplash.com/photo-1573148191366-f71ad4ff0958?auto=format&fit=crop&q=80&w=1000', false, true, 60, NOW()),
+('iphone-16e', 'iPhone 16e', 'Apple', 'Phones', '{"brandNew": 599, "ukUsed": 499}', 'The perfect balance of performance and value. A16 Bionic chip, 48MP camera, Touch ID', 'https://images.unsplash.com/photo-1510557880182-3d4d3cba30a8?auto=format&fit=crop&q=80&w=1000', false, false, 75, NOW()),
+('iphone-15-pro-max', 'iPhone 15 Pro Max', 'Apple', 'Phones', '{"brandNew": 1199, "ukUsed": 949}', 'Powerful titanium design, A17 Pro chip, 5x zoom optical zoom, USB-C', 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&q=80&w=1000', false, true, 35, NOW()),
+('iphone-15-pro', 'iPhone 15 Pro', 'Apple', 'Phones', '{"brandNew": 999, "ukUsed": 829}', 'Titanium design, A17 Pro chip, 48MP camera, Action Button, USB-C', 'https://images.unsplash.com/photo-1678685888221-cda773a3dcdb?auto=format&fit=crop&q=80&w=1000', false, false, 40, NOW()),
+('iphone-15', 'iPhone 15', 'Apple', 'Phones', '{"brandNew": 699, "ukUsed": 579}', 'Dynamic Island, 48MP camera, USB-C. A reliable everyday smartphone', 'https://images.unsplash.com/photo-1580910051074-3eb694886531?auto=format&fit=crop&q=80&w=1000', false, false, 80, NOW()),
+('iphone-14-pro-max', 'iPhone 14 Pro Max', 'Apple', 'Phones', '{"brandNew": 999, "ukUsed": 779}', 'Dynamic Island, 48MP camera, A16 Bionic, All-day battery life', 'https://images.unsplash.com/photo-1621330381928-ec437593df27?auto=format&fit=crop&q=80&w=1000', false, true, 25, NOW()),
+('iphone-14-pro', 'iPhone 14 Pro', 'Apple', 'Phones', '{"brandNew": 899, "ukUsed": 699}', 'Pro camera system, Dynamic Island, Always-On display', 'https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&q=80&w=1000', false, false, 30, NOW()),
+('iphone-14', 'iPhone 14', 'Apple', 'Phones', '{"brandNew": 599, "ukUsed": 479}', 'Great performance, excellent camera system, long battery life', 'https://images.unsplash.com/photo-1632638890403-84c677385987?auto=format&fit=crop&q=80&w=1000', false, false, 55, NOW()),
+
+('s24-ultra', 'Samsung Galaxy S24 Ultra', 'Samsung', 'Phones', '{"brandNew": 1419, "ukUsed": 1199}', 'Titanium build, S Pen, 200MP camera, Galaxy AI, 6.8" QHD+ display', 'https://images.unsplash.com/photo-1610945265078-3858a0828671?auto=format&fit=crop&q=80&w=1000', true, true, 35, NOW()),
+('s24-plus', 'Samsung Galaxy S24+', 'Samsung', 'Phones', '{"brandNew": 1099, "ukUsed": 929}', 'Galaxy AI features, 50MP camera, 6.7" display, all-day battery', 'https://images.unsplash.com/photo-1610945264074-5e5ed314c552?auto=format&fit=crop&q=80&w=1000', false, true, 40, NOW()),
+('s24', 'Samsung Galaxy S24', 'Samsung', 'Phones', '{"brandNew": 899, "ukUsed": 749}', 'Galaxy AI companion, 50MP camera, 6.2" display, titanium frame', 'https://images.unsplash.com/photo-1585060544812-6b45742d762f?auto=format&fit=crop&q=80&w=1000', false, false, 50, NOW()),
+('s23-ultra', 'Samsung Galaxy S23 Ultra', 'Samsung', 'Phones', '{"brandNew": 1199, "ukUsed": 949}', '200MP camera, S Pen support, Snapdragon 8 Gen 2', 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&q=80&w=1000', false, true, 25, NOW()),
+('s23-fe', 'Samsung Galaxy S23 FE', 'Samsung', 'Phones', '{"brandNew": 499, "ukUsed": 419}', 'Fan Edition with premium features at an affordable price', 'https://images.unsplash.com/photo-1678685888121-3da2e38ac920?auto=format&fit=crop&q=80&w=1000', false, false, 60, NOW()),
+
+('pixel-9-pro', 'Google Pixel 9 Pro', 'Google', 'Phones', '{"brandNew": 1099, "ukUsed": 929}', 'Google AI, 50MP camera, 7 years of updates, Tensor G4', 'https://images.unsplash.com/photo-1598327036850-c9e8412ca22e?auto=format&fit=crop&q=80&w=1000', true, true, 40, NOW()),
+('pixel-9', 'Google Pixel 9', 'Google', 'Phones', '{"brandNew": 899, "ukUsed": 749}', 'Smart AI features, incredible camera, Tensor G4 chip', 'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?auto=format&fit=crop&q=80&w=1000', false, true, 45, NOW()),
+('pixel-8-pro', 'Google Pixel 8 Pro', 'Google', 'Phones', '{"brandNew": 899, "ukUsed": 699}', 'Tensor G3, Magic Eraser, best-in-class camera for photography', 'https://images.unsplash.com/photo-1612442449529-867819e0061e?auto=format&fit=crop&q=80&w=1000', false, false, 35, NOW()),
+('pixel-8', 'Google Pixel 8', 'Google', 'Phones', '{"brandNew": 699, "ukUsed": 569}', 'Excellent camera, clean Android experience, Tensor G3', 'https://images.unsplash.com/photo-1580910051074-3eb694886531?auto=format&fit=crop&q=80&w=1000', false, false, 50, NOW()),
+
+('macbook-air-m3', 'MacBook Air M3 15"', 'Apple', 'Laptops', '{"brandNew": 1499, "ukUsed": 1299}', 'M3 chip, 15.3" Liquid Retina display, 18hr battery, fanless design', 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=1000', true, true, 25, NOW()),
+('macbook-air-m3-13', 'MacBook Air M3 13"', 'Apple', 'Laptops', '{"brandNew": 1299, "ukUsed": 1099}', 'Powerful and portable. M3 chip, 13.6" display, 18hr battery', 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&q=80&w=1000', false, true, 30, NOW()),
+('macbook-air-m2', 'MacBook Air M2 13"', 'Apple', 'Laptops', '{"brandNew": 1099, "ukUsed": 899}', 'M2 chip, redesigned with thin bezels, MagSafe charging', 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&q=80&w=1000', false, false, 35, NOW()),
+('macbook-pro-14-m3', 'MacBook Pro 14" M3 Pro', 'Apple', 'Laptops', '{"brandNew": 2199, "ukUsed": 1899}', 'M3 Pro chip, Liquid Retina XDR display, 17hr battery', 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&q=80&w=1000', true, false, 20, NOW()),
+('macbook-pro-16-m3', 'MacBook Pro 16" M3 Max', 'Apple', 'Laptops', '{"brandNew": 3499, "ukUsed": 2999}', 'Maximum performance with M3 Max chip, stunning 16" display', 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=1000', false, true, 10, NOW()),
+
+('ipad-pro-m4', 'iPad Pro M4 11"', 'Apple', 'Tablets', '{"brandNew": 999, "ukUsed": 849}', 'M4 chip, OLED display, ultra-thin design, Apple Pencil Pro', 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=1000', true, true, 25, NOW()),
+('ipad-air-m2', 'iPad Air M2', 'Apple', 'Tablets', '{"brandNew": 799, "ukUsed": 679}', 'M2 chip, 11" or 13" display, compatible with Apple Pencil Pro', 'https://images.unsplash.com/photo-1585790050230-5dd28404ccb9?auto=format&fit=crop&q=80&w=1000', false, true, 35, NOW()),
+('ipad-10th-gen', 'iPad 10th Generation', 'Apple', 'Tablets', '{"brandNew": 499, "ukUsed": 419}', 'A14 Bionic, 10.9" display, versatile for everyday use', 'https://images.unsplash.com/photo-1561154464-82e9adf32764?auto=format&fit=crop&q=80&w=1000', false, false, 50, NOW()),
+('ipad-mini-6', 'iPad Mini 6th Gen', 'Apple', 'Tablets', '{"brandNew": 549, "ukUsed": 449}', 'Compact 8.3" display, A15 Bionic, perfect for reading and gaming', 'https://images.unsplash.com/photo-1532520739024-3bc37ba872ce?auto=format&fit=crop&q=80&w=1000', false, false, 40, NOW()),
+
+('airpods-pro-2', 'AirPods Pro 2 USB-C', 'Apple', 'Audio', '{"brandNew": 249, "ukUsed": 199}', 'Active Noise Cancellation, Adaptive Audio, USB-C charging', 'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&q=80&w=1000', true, true, 100, NOW()),
+('airpods-3', 'AirPods 3rd Generation', 'Apple', 'Audio', '{"brandNew": 179, "ukUsed": 149}', 'Spatial Audio, force sensor control, MagSafe charging case', 'https://images.unsplash.com/photo-1588423771092-0e7a1f8b8a12?auto=format&fit=crop&q=80&w=1000', false, false, 80, NOW()),
+('airpods-max', 'AirPods Max', 'Apple', 'Audio', '{"brandNew": 549, "ukUsed": 449}', 'Premium over-ear headphones, ANC, spatial audio, Apple H1 chip', 'https://images.unsplash.com/photo-1613048882013-311ef115f0b6?auto=format&fit=crop&q=80&w=1000', false, true, 20, NOW()),
+
+('apple-watch-ultra-2', 'Apple Watch Ultra 2', 'Apple', 'Wearables', '{"brandNew": 799, "ukUsed": 679}', 'Most rugged Apple Watch, titanium, precision GPS, 36hr battery', 'https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?auto=format&fit=crop&q=80&w=1000', true, true, 20, NOW()),
+('apple-watch-series-9', 'Apple Watch Series 9', 'Apple', 'Wearables', '{"brandNew": 499, "ukUsed": 399}', 'S9 chip, Double Tap gesture, brighter display, health features', 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&q=80&w=1000', false, true, 35, NOW()),
+('apple-watch-se', 'Apple Watch SE', 'Apple', 'Wearables', '{"brandNew": 299, "ukUsed": 249}', 'Essential Apple Watch features at an affordable price', 'https://images.unsplash.com/photo-1551816230-ef5deaed4a26?auto=format&fit=crop&q=80&w=1000', false, false, 50, NOW()),
+
+('galaxy-watch-6', 'Samsung Galaxy Watch 6', 'Samsung', 'Wearables', '{"brandNew": 349, "ukUsed": 279}', 'Advanced health monitoring, sleek design, Wear OS powered', 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&q=80&w=1000', false, false, 40, NOW()),
+('galaxy-buds-pro-2', 'Samsung Galaxy Buds Pro 2', 'Samsung', 'Audio', '{"brandNew": 229, "ukUsed": 179}', 'Intelligent ANC, 360 audio, Hi-Fi sound quality', 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&q=80&w=1000', false, false, 50, NOW()),
+
+('ps5-console', 'PlayStation 5 Console', 'Gaming', 'Consoles', '{"brandNew": 499, "ukUsed": 429}', 'PS5 console with DualSense controller, 4K gaming, ultra-fast SSD', 'https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&q=80&w=1000', true, true, 15, NOW()),
+('ps5-digital', 'PlayStation 5 Digital Edition', 'Gaming', 'Consoles', '{"brandNew": 399, "ukUsed": 349}', 'PS5 without disc drive, digital gaming at great value', 'https://images.unsplash.com/photo-1605901309584-818e25960b8f?auto=format&fit=crop&q=80&w=1000', false, true, 20, NOW()),
+('xbox-series-x', 'Xbox Series X', 'Gaming', 'Consoles', '{"brandNew": 499, "ukUsed": 419}', 'Most powerful Xbox, 12 teraflops, 4K gaming, Game Pass compatible', 'https://images.unsplash.com/photo-1621259182978-fbf93132d53d?auto=format&fit=crop&q=80&w=1000', false, false, 20, NOW()),
+('xbox-series-s', 'Xbox Series S', 'Gaming', 'Consoles', '{"brandNew": 299, "ukUsed": 249}', 'Next-gen Xbox performance in the smallest Xbox ever', 'https://images.unsplash.com/photo-1610945265078-3858a0828671?auto=format&fit=crop&q=80&w=1000', false, false, 30, NOW()),
+
+('switch-oled', 'Nintendo Switch OLED', 'Gaming', 'Consoles', '{"brandNew": 349, "ukUsed": 299}', '7" OLED screen, 64GB storage, enhanced audio, dock included', 'https://images.unsplash.com/photo-1578303512597-81e6cc555140?auto=format&fit=crop&q=80&w=1000', false, false, 30, NOW());
+
+-- Verify insertion
+SELECT count(*) AS products_added FROM public.products;
+SELECT name, prices, brand FROM public.products WHERE id IN ('iphone-16-pro-max', 'ps5-console', 'switch-oled', 'macbook-air-m3') LIMIT 10;

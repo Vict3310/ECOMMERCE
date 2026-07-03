@@ -22,17 +22,23 @@ const ProductFormModal = ({ isOpen, onClose, product = null }) => {
   const [saveMessage, setSaveMessage] = useState('');
 
   useEffect(() => {
+    console.log('[ProductFormModal] === USEEFFECT TRIGGERED ===');
+    console.log('[ProductFormModal] isOpen:', isOpen, '| product:', product);
     if (product) {
+      console.log('[ProductFormModal] Loading EDIT mode for product:', product.id, product.name);
       const imgs = Array.isArray(product.images) && product.images.length > 0
         ? [...product.images]
         : (product.image ? [product.image] : []);
+      console.log('[ProductFormModal] Extracted images:', imgs);
       setFormData({
         batteryHealth: '', isDeal: false, stock: 0,
         ...product,
         images: imgs,
         image: imgs[0] || product.image || '',
       });
+      console.log('[ProductFormModal] formData set (EDIT):', { name: formData.name, images: imgs.length });
     } else {
+      console.log('[ProductFormModal] Loading NEW PRODUCT mode');
       setFormData({
         name: '', brand: '', category: 'Phones',
         prices: { brandNew: '', ukUsed: '' },
@@ -74,23 +80,39 @@ const ProductFormModal = ({ isOpen, onClose, product = null }) => {
       showNotification(`Only ${room} more slot(s) available; extra files not uploaded.`, 'info');
     }
 
+    console.log('[ProductFormModal] handleFileUpload STARTED', {
+      totalFiles: okFiles.length,
+      toUpload: toUpload.length,
+      room
+    });
     setIsUploading(true);
     try {
       const newUrls = [];
       for (const file of toUpload) {
+        console.log('[ProductFormModal] Processing file:', file.name, 'size:', file.size);
         const prepared = await compressImageFile(file);
+        console.log('[ProductFormModal] After compress, size:', prepared.size);
         const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}-${prepared.name}`;
+        console.log('[ProductFormModal] Uploading to bucket:', fileName);
         const { error: uploadError } = await supabase.storage.from('product-images').upload(fileName, prepared);
-        if (uploadError) throw uploadError;
+        console.log('[ProductFormModal] Upload result:', { error: uploadError });
+        if (uploadError) {
+          console.error('[ProductFormModal] Upload ERROR:', uploadError);
+          throw uploadError;
+        }
+        console.log('[ProductFormModal] Getting public URL for:', fileName);
         const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(fileName);
+        console.log('[ProductFormModal] Got URL:', publicUrl);
         newUrls.push(publicUrl);
       }
+      console.log('[ProductFormModal] All URLs collected:', newUrls);
       setFormData((prev) => {
         const merged = [...(prev.images || []), ...newUrls];
+        console.log('[ProductFormModal] Merged images, total count:', merged.length);
         return { ...prev, images: merged, image: merged[0] || prev.image };
       });
     } catch (error) {
-      console.error("Storage Error Details:", error);
+      console.error('[ProductFormModal] Storage Error Details:', error);
       showNotification(`Upload failed: ${error.message || 'Unknown error'}`, 'error');
     } finally {
       setIsUploading(false);
@@ -99,8 +121,12 @@ const ProductFormModal = ({ isOpen, onClose, product = null }) => {
   };
 
   const removeGalleryImage = (index) => {
+    console.log('[ProductFormModal] === REMOVE IMAGE ===');
+    console.log('[ProductFormModal] Removing image at index:', index);
+    console.log('[ProductFormModal] Current images:', formData.images);
     setFormData((prev) => {
       const next = (prev.images || []).filter((_, i) => i !== index);
+      console.log('[ProductFormModal] After removal, images count:', next.length, 'new cover:', next[0]);
       return { ...prev, images: next, image: next[0] || '' };
     });
   };
@@ -156,9 +182,14 @@ const ProductFormModal = ({ isOpen, onClose, product = null }) => {
   };
 
   const handleSave = async (e) => {
+    console.log('[ProductFormModal] === HANDLE SAVE TRIGGERED ===');
+    console.log('[ProductFormModal] Form event:', e);
     e.preventDefault();
     const imgs = (formData.images || []).filter(Boolean);
+    console.log('[ProductFormModal] Form data images:', formData.images);
+    console.log('[ProductFormModal] Filtered images (truthy):', imgs);
     if (imgs.length === 0) {
+      console.warn('[ProductFormModal] BLOCKED: No images');
       showNotification('Add at least one product image.', 'error');
       return;
     }
@@ -182,32 +213,105 @@ const ProductFormModal = ({ isOpen, onClose, product = null }) => {
       stock: Number(formData.stock || 0),
       created_at: product?.created_at,
     };
+    console.log('[ProductFormModal] Normalized product to save:', normalizedProduct);
+    console.log('[ProductFormModal] Is EDIT mode?', !!product, '| Product ID:', product?.id);
 
     setSaveStatus('pending');
     setSaveMessage('Saving product…');
 
     try {
+      let success = false;
+      let errorMsg = null;
+
       if (product && product.id) {
-        const { error } = await supabase.from('products').update(normalizedProduct).eq('id', product.id);
-        if (error) throw error;
-        setProducts(prev => prev.map(p => p.id === product.id ? normalizedProduct : p));
-        setSaveStatus('success');
-        setSaveMessage('Product updated successfully.');
+        // === EDIT MODE: UPDATE existing product ===
+        console.log('[ProductFormModal] === UPDATE PATH STARTED ===');
+        console.log('[ProductFormModal] Supabase client:', !!supabase);
+        console.log('[ProductFormModal] Trying to update product:', product.id);
+        
+        const { data: updateData, error: updateErr, status: updateStatus } = await supabase
+          .from('products')
+          .update(normalizedProduct)
+          .eq('id', product.id)
+          .select()
+          .single();
+        
+        console.log('[ProductFormModal] === UPDATE COMPLETE ===');
+        console.log('[ProductFormModal] Update data:', updateData);
+        console.log('[ProductFormModal] Update error:', updateErr);
+        console.log('[ProductFormModal] Update status:', updateStatus);
+
+        if (updateErr) {
+          console.error('[ProductFormModal] UPDATE ERROR:', updateErr);
+          errorMsg = updateErr.message;
+        } else if (!updateData) {
+          console.warn('[ProductFormModal] UPDATE returned no data — might be RLS blocked');
+          errorMsg = 'Update succeeded but no data returned. Check RLS policies.';
+        } else {
+          console.log('[ProductFormModal] Update succeeded!');
+          success = true;
+        }
       } else {
-        const newProduct = { ...normalizedProduct, id: Date.now().toString(), created_at: new Date().toISOString() };
-        const { error } = await supabase.from('products').insert(newProduct);
-        if (error) throw error;
-        setProducts(prev => [...prev, newProduct]);
-        setSaveStatus('success');
-        setSaveMessage('Product added successfully.');
+        // === INSERT MODE: Add new product ===
+        console.log('[ProductFormModal] === INSERT PATH STARTED ===');
+        console.log('[ProductFormModal] Trying to insert new product');
+        
+        const { data: inserted, error: insertErr } = await supabase
+          .from('products')
+          .insert(normalizedProduct)
+          .select()
+          .single();
+
+        console.log('[ProductFormModal] === INSERT COMPLETE ===');
+        console.log('[ProductFormModal] Inserted data:', inserted);
+        console.log('[ProductFormModal] Insert error:', insertErr);
+
+        if (insertErr) {
+          console.error('[ProductFormModal] INSERT ERROR:', insertErr);
+          errorMsg = insertErr.message;
+        } else if (!inserted) {
+          // RLS blocked the insert — Supabase doesn't throw, it just returns nothing
+          console.warn('[ProductFormModal] INSERT returned nothing — likely RLS blocked');
+          errorMsg = 'Save blocked: no permission to add products. Contact your site admin to grant admin/owner role.';
+        } else {
+          success = true;
+          console.log('[ProductFormModal] Insert succeeded!');
+          // Use the inserted row from the response (has real ID from DB)
+          setProducts(prev => [...prev, inserted]);
+        }
       }
 
-      window.setTimeout(() => {
-        setSaveStatus(null);
-        setSaveMessage('');
-        onClose();
-      }, 900);
+      if (success) {
+        console.log('[ProductFormModal] === SUCCESS PATH ===');
+        if (!product) {
+          // setProducts already called above with inserted data
+          console.log('[ProductFormModal] New product added to state');
+        } else {
+          // Update local state so UI reflects the change immediately
+          console.log('[ProductFormModal] Updating local state with edited product:', normalizedProduct.id);
+          setProducts(prev => prev.map(p => p.id === normalizedProduct.id ? normalizedProduct : p));
+        }
+        setSaveStatus('success');
+        setSaveMessage(product ? 'Product updated successfully.' : 'Product added successfully.');
+        console.log('[ProductFormModal] Auto-closing in 900ms...');
+
+        window.setTimeout(() => {
+          console.log('[ProductFormModal] Auto-closing modal now');
+          setSaveStatus(null);
+          setSaveMessage('');
+          onClose();
+        }, 900);
+      } else {
+        console.error('[ProductFormModal] === FAILURE PATH ===');
+        console.error('[ProductFormModal] Error message:', errorMsg);
+        console.warn("Save failed.", errorMsg);
+        setSaveStatus('error');
+        setSaveMessage(errorMsg || 'Save failed. Please check your connection and try again.');
+      }
     } catch (error) {
+      console.error('[ProductFormModal] === EXCEPTION CAUGHT ===');
+      console.error('[ProductFormModal] Error:', error);
+      console.error('[ProductFormModal] Error stack:', error.stack);
       console.warn("Save failed.", error);
       setSaveStatus('error');
       setSaveMessage(error.message || 'Save failed. Please check your connection and try again.');

@@ -314,3 +314,23 @@ DROP POLICY IF EXISTS "Admins can manage repair tickets" ON public.repair_ticket
 CREATE POLICY "Admins can manage repair tickets" ON public.repair_tickets FOR ALL
   USING (EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role IN ('admin', 'owner', 'worker')));
 
+-- Storage Bucket RLS Policies for product-images
+-- Copy these to Supabase SQL Editor to fix image upload persistence
+
+CREATE POLICY "Allow public read on product-images"
+ON storage.objects FOR SELECT
+USING (bucket_id = 'product-images');
+
+CREATE POLICY "Allow authenticated users to upload product images"
+ON storage.objects FOR INSERT
+WITH CHECK (bucket_id = 'product-images' AND auth.uid() IS NOT NULL);
+
+CREATE POLICY "Allow authenticated users to update their product images"
+ON storage.objects FOR UPDATE
+USING (bucket_id = 'product-images' AND auth.uid() = owner);
+
+CREATE POLICY "Allow authenticated users to delete their product images"
+ON storage.objects FOR DELETE
+USING (bucket_id = 'product-images' AND auth.uid() = owner);
+
+

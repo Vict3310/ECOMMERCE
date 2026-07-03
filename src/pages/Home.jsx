@@ -30,7 +30,7 @@ const Home = ({ onProductClick, onShopClick }) => {
              <div className="hide-scrollbar" style={{ display: 'flex', gap: '24px', overflowX: 'auto', paddingBottom: '24px' }}>
                 {flashDeals.map(deal => (
                   <div key={deal.id} onClick={() => onProductClick(deal)} style={{ minWidth: '320px', padding: '32px', backgroundColor: 'var(--bg-secondary)', border: 'var(--border-thin)', borderRadius: '2px', cursor: 'pointer', position: 'relative', transition: 'transform 0.3s ease' }} className="hover-scale">
-                    <div style={{ position: 'absolute', top: '24px', right: '24px', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px' }}>
+                    <div style={{ position: 'absolute', top: '24px', right: '24px', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px', zIndex: 10 }}>
                        <div style={{ padding: '6px 12px', backgroundColor: '#FF3B3B', color: '#fff', fontSize: '9px', fontWeight: 900, borderRadius: '2px' }}>-20% OFF</div>
                        <CountdownTimer targetDate={new Date().setHours(23,59,59,999)} />
                     </div>

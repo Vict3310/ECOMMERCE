@@ -38,7 +38,7 @@ const CountdownTimer = ({ targetDate }) => {
   });
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 160px 10px 16px', backgroundColor: 'var(--brand-blue)', color: '#fff', borderRadius: '2px', width: 'fit-content' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 12px', backgroundColor: 'var(--brand-blue)', color: '#fff', borderRadius: '2px', width: 'fit-content' }}>
        <Timer size={14} style={{ color: '#fff' }} />
        <span style={{ fontSize: '9px', fontWeight: 900, letterSpacing: '0.1em', marginRight: '4px' }}>FLASH ENDS:</span>
        <div style={{ display: 'flex', gap: '2px' }}>
