@@ -66,7 +66,7 @@ const HeroCarousel = ({ onExplore }) => {
            <img 
               src={heroSlides[current].image} 
               alt={heroSlides[current].title} 
-              fetchpriority="high"
+              fetchPriority="high"
               style={{ 
                 position: 'absolute', inset: 0, 
                 width: '100%', height: '100%', 
